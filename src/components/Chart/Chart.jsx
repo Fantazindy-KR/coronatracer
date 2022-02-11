@@ -3,36 +3,61 @@ import { fetchDailyData } from "../../api";
 import { Line, Bar } from "react-chartjs-2";
 
 //if occur error like 'Uncaught Error: "category" is not a registered scale.' add code above.
+//(https://react-chartjs-2.netlify.app/examples)
+// import {
+//   Chart,
+//   LineController,
+//   LineElement,
+//   PointElement,
+//   LinearScale,
+//   Title,
+//   CategoryScale,
+// } from "chart.js";
+
 import {
-  Chart,
+  Chart as ChartJS,
   LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
   CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
 } from "chart.js";
 
 import styles from "./Chart.module.css";
 
-Chart.register(
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
+// Chart.register(
+//   LineController,
+//   LineElement,
+//   PointElement,
+//   LinearScale,
+//   CategoryScale,
+//   Title
+// );
+
+ChartJS.register(
   CategoryScale,
-  Title
+  LineController,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
 );
 //--------------------------------------------------------------------------------------------
 
-const Charts = () => {
+const Charts = ({ data: { confirmed, recovered, deaths }, country }) => {
   const [dailyData, setDailyData] = useState([]);
 
   useEffect(() => {
     const fetchAPI = async () => {
       setDailyData(await fetchDailyData());
     };
-    console.log(dailyData);
 
     fetchAPI();
   }, []);
@@ -60,7 +85,32 @@ const Charts = () => {
     />
   ) : null;
 
-  return <div className={styles.container}>{lineChart}</div>;
+  const barChart = confirmed ? (
+    <Bar
+      data={{
+        labels: ["Infected", "Recovered", "Deaths"],
+        datasets: [
+          {
+            label: "People",
+            backgroundColor: [
+              "rgba(0, 0, 255, 0.5)",
+              "rgba(0, 255, 0, 0.5)",
+              "rgba(255, 0, 0, 0.5)",
+            ],
+            data: [confirmed.value, recovered.value, deaths.value],
+          },
+        ],
+      }}
+      options={{
+        legend: { display: false },
+        title: { display: true, text: `Current state in ${country}` },
+      }}
+    />
+  ) : null;
+
+  return (
+    <div className={styles.container}>{country ? barChart : lineChart}</div>
+  );
 };
 
 export default Charts;
