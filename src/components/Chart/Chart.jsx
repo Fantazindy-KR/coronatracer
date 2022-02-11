@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { fetchDailyData } from "../../api";
 import { Line, Bar } from "react-chartjs-2";
 
-import styles from "./Chart.moudle.css";
-
 //if occur error like 'Uncaught Error: "category" is not a registered scale.' add code above.
 import {
   Chart,
@@ -15,6 +13,8 @@ import {
   CategoryScale,
 } from "chart.js";
 
+import styles from "./Chart.module.css";
+
 Chart.register(
   LineController,
   LineElement,
@@ -24,6 +24,7 @@ Chart.register(
   Title
 );
 //--------------------------------------------------------------------------------------------
+
 const Charts = () => {
   const [dailyData, setDailyData] = useState([]);
 
