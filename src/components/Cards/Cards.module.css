@@ -20,6 +20,7 @@
 
 @media (max-width: 770px) {
   .card {
+    width: 600px;
     margin: 2% 0 !important;
   }
 }
